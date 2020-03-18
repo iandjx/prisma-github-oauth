@@ -2,7 +2,9 @@ import bcrypt from "bcryptjs";
 import getUserId from "../utils/getUserId";
 import generateToken from "../utils/generateToken";
 import hashPassword from "../utils/hashPassword";
-
+import { getPrismaUser, createPrismaUser } from "../utils/getGithubUser";
+import { getGithubToken, getGithubUser } from "../utils/getGithubUser";
+import jwt from "jsonwebtoken";
 const Mutation = {
   async createUser(parent, args, { prisma }, info) {
     const password = await hashPassword(args.data.password);
@@ -217,6 +219,21 @@ const Mutation = {
       },
       info
     );
+  },
+  async authenticate(parent, { githubCode }, { prisma }, info) {
+    const githubToken = await getGithubToken(githubCode);
+    const githubUser = await getGithubUser(githubToken);
+
+    let user = await getPrismaUser(prisma, githubUser.id);
+
+    if (!user) {
+      user = await createPrismaUser(prisma, githubUser);
+    }
+
+    return {
+      token: jwt.sign({ userId: user.id }, process.env.JWT_SECRET),
+      user
+    };
   }
 };
 

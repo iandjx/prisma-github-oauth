@@ -1,7 +1,11 @@
 # source: https://accel-code-d3efd944e1.herokuapp.com/server/dev
-# timestamp: Tue Mar 17 2020 21:15:37 GMT+0900 (Japan Standard Time)
+# timestamp: Wed Mar 18 2020 07:20:23 GMT+0900 (Japan Standard Time)
 
 type AggregateComment {
+  count: Int!
+}
+
+type AggregateNote {
   count: Int!
 }
 
@@ -495,21 +499,27 @@ type Mutation {
   createUser(data: UserCreateInput!): User!
   createPost(data: PostCreateInput!): Post!
   createComment(data: CommentCreateInput!): Comment!
+  createNote(data: NoteCreateInput!): Note!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
   updateComment(data: CommentUpdateInput!, where: CommentWhereUniqueInput!): Comment
+  updateNote(data: NoteUpdateInput!, where: NoteWhereUniqueInput!): Note
   deleteUser(where: UserWhereUniqueInput!): User
   deletePost(where: PostWhereUniqueInput!): Post
   deleteComment(where: CommentWhereUniqueInput!): Comment
+  deleteNote(where: NoteWhereUniqueInput!): Note
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
   upsertComment(where: CommentWhereUniqueInput!, create: CommentCreateInput!, update: CommentUpdateInput!): Comment!
+  upsertNote(where: NoteWhereUniqueInput!, create: NoteCreateInput!, update: NoteUpdateInput!): Note!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   updateManyPosts(data: PostUpdateManyMutationInput!, where: PostWhereInput): BatchPayload!
   updateManyComments(data: CommentUpdateManyMutationInput!, where: CommentWhereInput): BatchPayload!
+  updateManyNotes(data: NoteUpdateManyMutationInput!, where: NoteWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   deleteManyPosts(where: PostWhereInput): BatchPayload!
   deleteManyComments(where: CommentWhereInput): BatchPayload!
+  deleteManyNotes(where: NoteWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -522,6 +532,330 @@ enum MutationType {
 interface Node {
   """The id of the object."""
   id: ID!
+}
+
+type Note implements Node {
+  id: ID!
+  owner: User!
+  text: String!
+}
+
+"""A connection to a list of items."""
+type NoteConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [NoteEdge]!
+  aggregate: AggregateNote!
+}
+
+input NoteCreateInput {
+  id: ID
+  text: String!
+  owner: UserCreateOneWithoutNotesInput!
+}
+
+input NoteCreateManyWithoutOwnerInput {
+  create: [NoteCreateWithoutOwnerInput!]
+  connect: [NoteWhereUniqueInput!]
+}
+
+input NoteCreateWithoutOwnerInput {
+  id: ID
+  text: String!
+}
+
+"""An edge in a connection."""
+type NoteEdge {
+  """The item at the end of the edge."""
+  node: Note!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum NoteOrderByInput {
+  id_ASC
+  id_DESC
+  text_ASC
+  text_DESC
+}
+
+type NotePreviousValues {
+  id: ID!
+  text: String!
+}
+
+input NoteScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [NoteScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [NoteScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [NoteScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  text: String
+
+  """All values that are not equal to given value."""
+  text_not: String
+
+  """All values that are contained in given list."""
+  text_in: [String!]
+
+  """All values that are not contained in given list."""
+  text_not_in: [String!]
+
+  """All values less than the given value."""
+  text_lt: String
+
+  """All values less than or equal the given value."""
+  text_lte: String
+
+  """All values greater than the given value."""
+  text_gt: String
+
+  """All values greater than or equal the given value."""
+  text_gte: String
+
+  """All values containing the given string."""
+  text_contains: String
+
+  """All values not containing the given string."""
+  text_not_contains: String
+
+  """All values starting with the given string."""
+  text_starts_with: String
+
+  """All values not starting with the given string."""
+  text_not_starts_with: String
+
+  """All values ending with the given string."""
+  text_ends_with: String
+
+  """All values not ending with the given string."""
+  text_not_ends_with: String
+}
+
+type NoteSubscriptionPayload {
+  mutation: MutationType!
+  node: Note
+  updatedFields: [String!]
+  previousValues: NotePreviousValues
+}
+
+input NoteSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [NoteSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [NoteSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [NoteSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: NoteWhereInput
+}
+
+input NoteUpdateInput {
+  text: String
+  owner: UserUpdateOneRequiredWithoutNotesInput
+}
+
+input NoteUpdateManyDataInput {
+  text: String
+}
+
+input NoteUpdateManyMutationInput {
+  text: String
+}
+
+input NoteUpdateManyWithoutOwnerInput {
+  create: [NoteCreateWithoutOwnerInput!]
+  connect: [NoteWhereUniqueInput!]
+  set: [NoteWhereUniqueInput!]
+  disconnect: [NoteWhereUniqueInput!]
+  delete: [NoteWhereUniqueInput!]
+  update: [NoteUpdateWithWhereUniqueWithoutOwnerInput!]
+  updateMany: [NoteUpdateManyWithWhereNestedInput!]
+  deleteMany: [NoteScalarWhereInput!]
+  upsert: [NoteUpsertWithWhereUniqueWithoutOwnerInput!]
+}
+
+input NoteUpdateManyWithWhereNestedInput {
+  where: NoteScalarWhereInput!
+  data: NoteUpdateManyDataInput!
+}
+
+input NoteUpdateWithoutOwnerDataInput {
+  text: String
+}
+
+input NoteUpdateWithWhereUniqueWithoutOwnerInput {
+  where: NoteWhereUniqueInput!
+  data: NoteUpdateWithoutOwnerDataInput!
+}
+
+input NoteUpsertWithWhereUniqueWithoutOwnerInput {
+  where: NoteWhereUniqueInput!
+  update: NoteUpdateWithoutOwnerDataInput!
+  create: NoteCreateWithoutOwnerInput!
+}
+
+input NoteWhereInput {
+  """Logical AND on all given filters."""
+  AND: [NoteWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [NoteWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [NoteWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  text: String
+
+  """All values that are not equal to given value."""
+  text_not: String
+
+  """All values that are contained in given list."""
+  text_in: [String!]
+
+  """All values that are not contained in given list."""
+  text_not_in: [String!]
+
+  """All values less than the given value."""
+  text_lt: String
+
+  """All values less than or equal the given value."""
+  text_lte: String
+
+  """All values greater than the given value."""
+  text_gt: String
+
+  """All values greater than or equal the given value."""
+  text_gte: String
+
+  """All values containing the given string."""
+  text_contains: String
+
+  """All values not containing the given string."""
+  text_not_contains: String
+
+  """All values starting with the given string."""
+  text_starts_with: String
+
+  """All values not starting with the given string."""
+  text_not_starts_with: String
+
+  """All values ending with the given string."""
+  text_ends_with: String
+
+  """All values not ending with the given string."""
+  text_not_ends_with: String
+  owner: UserWhereInput
+}
+
+input NoteWhereUniqueInput {
+  id: ID
 }
 
 """Information about pagination in a connection."""
@@ -1111,12 +1445,15 @@ type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
   comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment]!
+  notes(where: NoteWhereInput, orderBy: NoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Note]!
   user(where: UserWhereUniqueInput!): User
   post(where: PostWhereUniqueInput!): Post
   comment(where: CommentWhereUniqueInput!): Comment
+  note(where: NoteWhereUniqueInput!): Note
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
   commentsConnection(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CommentConnection!
+  notesConnection(where: NoteWhereInput, orderBy: NoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): NoteConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -1129,17 +1466,21 @@ type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
   comment(where: CommentSubscriptionWhereInput): CommentSubscriptionPayload
+  note(where: NoteSubscriptionWhereInput): NoteSubscriptionPayload
 }
 
 type User implements Node {
   id: ID!
   name: String!
-  email: String!
-  password: String!
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
   comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
   createdAt: DateTime!
   updatedAt: DateTime!
+  githubUserId: String!
+  bio: String!
+  public_repos: Int!
+  public_gists: Int!
+  notes(where: NoteWhereInput, orderBy: NoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Note!]
 }
 
 """A connection to a list of items."""
@@ -1155,14 +1496,22 @@ type UserConnection {
 input UserCreateInput {
   id: ID
   name: String!
-  email: String!
-  password: String!
+  githubUserId: String!
+  bio: String!
+  public_repos: Int!
+  public_gists: Int!
   posts: PostCreateManyWithoutAuthorInput
   comments: CommentCreateManyWithoutAuthorInput
+  notes: NoteCreateManyWithoutOwnerInput
 }
 
 input UserCreateOneWithoutCommentsInput {
   create: UserCreateWithoutCommentsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutNotesInput {
+  create: UserCreateWithoutNotesInput
   connect: UserWhereUniqueInput
 }
 
@@ -1174,17 +1523,34 @@ input UserCreateOneWithoutPostsInput {
 input UserCreateWithoutCommentsInput {
   id: ID
   name: String!
-  email: String!
-  password: String!
+  githubUserId: String!
+  bio: String!
+  public_repos: Int!
+  public_gists: Int!
   posts: PostCreateManyWithoutAuthorInput
+  notes: NoteCreateManyWithoutOwnerInput
+}
+
+input UserCreateWithoutNotesInput {
+  id: ID
+  name: String!
+  githubUserId: String!
+  bio: String!
+  public_repos: Int!
+  public_gists: Int!
+  posts: PostCreateManyWithoutAuthorInput
+  comments: CommentCreateManyWithoutAuthorInput
 }
 
 input UserCreateWithoutPostsInput {
   id: ID
   name: String!
-  email: String!
-  password: String!
+  githubUserId: String!
+  bio: String!
+  public_repos: Int!
+  public_gists: Int!
   comments: CommentCreateManyWithoutAuthorInput
+  notes: NoteCreateManyWithoutOwnerInput
 }
 
 """An edge in a connection."""
@@ -1201,23 +1567,29 @@ enum UserOrderByInput {
   id_DESC
   name_ASC
   name_DESC
-  email_ASC
-  email_DESC
-  password_ASC
-  password_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
+  githubUserId_ASC
+  githubUserId_DESC
+  bio_ASC
+  bio_DESC
+  public_repos_ASC
+  public_repos_DESC
+  public_gists_ASC
+  public_gists_DESC
 }
 
 type UserPreviousValues {
   id: ID!
   name: String!
-  email: String!
-  password: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+  githubUserId: String!
+  bio: String!
+  public_repos: Int!
+  public_gists: Int!
 }
 
 type UserSubscriptionPayload {
@@ -1261,16 +1633,21 @@ input UserSubscriptionWhereInput {
 
 input UserUpdateInput {
   name: String
-  email: String
-  password: String
+  githubUserId: String
+  bio: String
+  public_repos: Int
+  public_gists: Int
   posts: PostUpdateManyWithoutAuthorInput
   comments: CommentUpdateManyWithoutAuthorInput
+  notes: NoteUpdateManyWithoutOwnerInput
 }
 
 input UserUpdateManyMutationInput {
   name: String
-  email: String
-  password: String
+  githubUserId: String
+  bio: String
+  public_repos: Int
+  public_gists: Int
 }
 
 input UserUpdateOneRequiredWithoutCommentsInput {
@@ -1278,6 +1655,13 @@ input UserUpdateOneRequiredWithoutCommentsInput {
   connect: UserWhereUniqueInput
   update: UserUpdateWithoutCommentsDataInput
   upsert: UserUpsertWithoutCommentsInput
+}
+
+input UserUpdateOneRequiredWithoutNotesInput {
+  create: UserCreateWithoutNotesInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutNotesDataInput
+  upsert: UserUpsertWithoutNotesInput
 }
 
 input UserUpdateOneRequiredWithoutPostsInput {
@@ -1289,21 +1673,42 @@ input UserUpdateOneRequiredWithoutPostsInput {
 
 input UserUpdateWithoutCommentsDataInput {
   name: String
-  email: String
-  password: String
+  githubUserId: String
+  bio: String
+  public_repos: Int
+  public_gists: Int
   posts: PostUpdateManyWithoutAuthorInput
+  notes: NoteUpdateManyWithoutOwnerInput
+}
+
+input UserUpdateWithoutNotesDataInput {
+  name: String
+  githubUserId: String
+  bio: String
+  public_repos: Int
+  public_gists: Int
+  posts: PostUpdateManyWithoutAuthorInput
+  comments: CommentUpdateManyWithoutAuthorInput
 }
 
 input UserUpdateWithoutPostsDataInput {
   name: String
-  email: String
-  password: String
+  githubUserId: String
+  bio: String
+  public_repos: Int
+  public_gists: Int
   comments: CommentUpdateManyWithoutAuthorInput
+  notes: NoteUpdateManyWithoutOwnerInput
 }
 
 input UserUpsertWithoutCommentsInput {
   update: UserUpdateWithoutCommentsDataInput!
   create: UserCreateWithoutCommentsInput!
+}
+
+input UserUpsertWithoutNotesInput {
+  update: UserUpdateWithoutNotesDataInput!
+  create: UserCreateWithoutNotesInput!
 }
 
 input UserUpsertWithoutPostsInput {
@@ -1400,86 +1805,6 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   name_not_ends_with: String
-  email: String
-
-  """All values that are not equal to given value."""
-  email_not: String
-
-  """All values that are contained in given list."""
-  email_in: [String!]
-
-  """All values that are not contained in given list."""
-  email_not_in: [String!]
-
-  """All values less than the given value."""
-  email_lt: String
-
-  """All values less than or equal the given value."""
-  email_lte: String
-
-  """All values greater than the given value."""
-  email_gt: String
-
-  """All values greater than or equal the given value."""
-  email_gte: String
-
-  """All values containing the given string."""
-  email_contains: String
-
-  """All values not containing the given string."""
-  email_not_contains: String
-
-  """All values starting with the given string."""
-  email_starts_with: String
-
-  """All values not starting with the given string."""
-  email_not_starts_with: String
-
-  """All values ending with the given string."""
-  email_ends_with: String
-
-  """All values not ending with the given string."""
-  email_not_ends_with: String
-  password: String
-
-  """All values that are not equal to given value."""
-  password_not: String
-
-  """All values that are contained in given list."""
-  password_in: [String!]
-
-  """All values that are not contained in given list."""
-  password_not_in: [String!]
-
-  """All values less than the given value."""
-  password_lt: String
-
-  """All values less than or equal the given value."""
-  password_lte: String
-
-  """All values greater than the given value."""
-  password_gt: String
-
-  """All values greater than or equal the given value."""
-  password_gte: String
-
-  """All values containing the given string."""
-  password_contains: String
-
-  """All values not containing the given string."""
-  password_not_contains: String
-
-  """All values starting with the given string."""
-  password_starts_with: String
-
-  """All values not starting with the given string."""
-  password_not_starts_with: String
-
-  """All values ending with the given string."""
-  password_ends_with: String
-
-  """All values not ending with the given string."""
-  password_not_ends_with: String
   createdAt: DateTime
 
   """All values that are not equal to given value."""
@@ -1524,15 +1849,142 @@ input UserWhereInput {
 
   """All values greater than or equal the given value."""
   updatedAt_gte: DateTime
+  githubUserId: String
+
+  """All values that are not equal to given value."""
+  githubUserId_not: String
+
+  """All values that are contained in given list."""
+  githubUserId_in: [String!]
+
+  """All values that are not contained in given list."""
+  githubUserId_not_in: [String!]
+
+  """All values less than the given value."""
+  githubUserId_lt: String
+
+  """All values less than or equal the given value."""
+  githubUserId_lte: String
+
+  """All values greater than the given value."""
+  githubUserId_gt: String
+
+  """All values greater than or equal the given value."""
+  githubUserId_gte: String
+
+  """All values containing the given string."""
+  githubUserId_contains: String
+
+  """All values not containing the given string."""
+  githubUserId_not_contains: String
+
+  """All values starting with the given string."""
+  githubUserId_starts_with: String
+
+  """All values not starting with the given string."""
+  githubUserId_not_starts_with: String
+
+  """All values ending with the given string."""
+  githubUserId_ends_with: String
+
+  """All values not ending with the given string."""
+  githubUserId_not_ends_with: String
+  bio: String
+
+  """All values that are not equal to given value."""
+  bio_not: String
+
+  """All values that are contained in given list."""
+  bio_in: [String!]
+
+  """All values that are not contained in given list."""
+  bio_not_in: [String!]
+
+  """All values less than the given value."""
+  bio_lt: String
+
+  """All values less than or equal the given value."""
+  bio_lte: String
+
+  """All values greater than the given value."""
+  bio_gt: String
+
+  """All values greater than or equal the given value."""
+  bio_gte: String
+
+  """All values containing the given string."""
+  bio_contains: String
+
+  """All values not containing the given string."""
+  bio_not_contains: String
+
+  """All values starting with the given string."""
+  bio_starts_with: String
+
+  """All values not starting with the given string."""
+  bio_not_starts_with: String
+
+  """All values ending with the given string."""
+  bio_ends_with: String
+
+  """All values not ending with the given string."""
+  bio_not_ends_with: String
+  public_repos: Int
+
+  """All values that are not equal to given value."""
+  public_repos_not: Int
+
+  """All values that are contained in given list."""
+  public_repos_in: [Int!]
+
+  """All values that are not contained in given list."""
+  public_repos_not_in: [Int!]
+
+  """All values less than the given value."""
+  public_repos_lt: Int
+
+  """All values less than or equal the given value."""
+  public_repos_lte: Int
+
+  """All values greater than the given value."""
+  public_repos_gt: Int
+
+  """All values greater than or equal the given value."""
+  public_repos_gte: Int
+  public_gists: Int
+
+  """All values that are not equal to given value."""
+  public_gists_not: Int
+
+  """All values that are contained in given list."""
+  public_gists_in: [Int!]
+
+  """All values that are not contained in given list."""
+  public_gists_not_in: [Int!]
+
+  """All values less than the given value."""
+  public_gists_lt: Int
+
+  """All values less than or equal the given value."""
+  public_gists_lte: Int
+
+  """All values greater than the given value."""
+  public_gists_gt: Int
+
+  """All values greater than or equal the given value."""
+  public_gists_gte: Int
   posts_every: PostWhereInput
   posts_some: PostWhereInput
   posts_none: PostWhereInput
   comments_every: CommentWhereInput
   comments_some: CommentWhereInput
   comments_none: CommentWhereInput
+  notes_every: NoteWhereInput
+  notes_some: NoteWhereInput
+  notes_none: NoteWhereInput
 }
 
 input UserWhereUniqueInput {
   id: ID
-  email: String
+  githubUserId: String
 }

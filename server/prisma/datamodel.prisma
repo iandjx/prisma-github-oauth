@@ -1,12 +1,19 @@
 type User {
   id: ID! @id
   name: String!
-  email: String! @unique
-  password: String!
+
   posts: [Post!]! @relation(name: "PostToUser", onDelete: CASCADE)
   comments: [Comment!]! @relation(name: "CommentToUser", onDelete: CASCADE)
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
+
+  githubUserId: String! @unique
+  
+  bio: String!
+  public_repos: Int!
+  public_gists: Int!
+
+  notes: [Note!]! @relation(name: "UserNote")
 }
 
 type Post {
@@ -27,4 +34,11 @@ type Comment {
   post: Post! @relation(name: "CommentToPost", onDelete: SET_NULL)
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
+}
+
+type Note {
+  id: ID! @id
+  owner: User! @relation(name: "UserNote")
+
+  text: String!
 }

@@ -118,6 +118,19 @@ const Query = {
     }
 
     return posts[0];
+  },
+  async note(_, { id }, { prisma, request }, info) {
+    const userId = getUserId(request);
+    const hasPermission = await prisma.db.exists.Note({
+      id,
+      owner: { id: userId }
+    });
+
+    if (!hasPermission) {
+      throw new Error("User has no permission");
+    }
+
+    return await prisma.query.note({ where: { id } });
   }
 };
 
