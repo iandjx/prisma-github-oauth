@@ -1,4 +1,5 @@
 # import UserOrderByInput, PostOrderByInput, CommentOrderByInput from './generated/prisma.graphql'
+# import User, Note from './generated/prisma.graphql'
 
 type Query {
   me: User
