@@ -1,9 +1,21 @@
 type User {
   id: ID! @id
-  name: String!
-  email: String! @unique
-  password: String!
-  createdAt: DateTime! @createdAt
-  updatedAt: DateTime! @updatedAt
+  name: String
+  githubLogin: String 
+  githubToken: String @unique
+  avatar: String
 
+}
+
+type Post {
+  id: ID! @id
+  published: Boolean! @default(value: false)
+  title: String!
+  content: String!
+}
+
+type AuthPayload {
+  id: ID! @id
+  token: String!
+  user: User!
 }

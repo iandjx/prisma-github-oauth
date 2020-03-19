@@ -1,53 +1,35 @@
-# import UserOrderByInput, PostOrderByInput, CommentOrderByInput from './generated/prisma.graphql'
-
-type Query {
-  users(
-    query: String
-    first: Int
-    skip: Int
-    after: String
-    orderBy: UserOrderByInput
-  ): [User!]!
-
-  me: User!
-}
-
-type Mutation {
-  createUser(data: CreateUserInput!): AuthPayload!
-  login(data: LoginUserInput!): AuthPayload!
-  deleteUser: User!
-  updateUser(data: UpdateUserInput!): User!
+type Post {
+  id: ID!
+  published: Boolean!
+  title: String!
+  content: String!
 }
 
 type AuthPayload {
+  id: ID!
   token: String!
   user: User!
 }
 
-input CreateUserInput {
-  name: String!
-  email: String!
-  password: String!
-}
-
-input LoginUserInput {
-  email: String!
-  password: String!
-}
-
-input UpdateUserInput {
-  name: String
-  email: String
-  password: String
-}
-
 type User {
   id: ID!
-  name: String!
-  email: String
-  password: String!
-  posts: [Post!]!
-  comments: [Comment!]!
-  updatedAt: String!
-  createdAt: String!
+  name: String
+  githubLogin: String
+  githubToken: String
+  avatar: String
+}
+
+type Query {
+  feed: [Post!]!
+  drafts: [Post!]!
+  post(id: ID!): Post
+  githubLoginUrl: String!
+  me: User
+}
+
+type Mutation {
+  createDraft(title: String!, content: String): Post
+  deletePost(id: ID!): Post
+  publish(id: ID!): Post
+  githubAuth(code: String!): AuthPayload!
 }

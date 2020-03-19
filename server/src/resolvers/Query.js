@@ -30,6 +30,18 @@ const Query = {
         id: userId
       }
     });
+  },
+  githubLoginUrl: () => {
+    return `https://github.com/login/oauth/authorize?client_id=${process.env.CLIENT_ID}`;
+  },
+  feed: (parent, args, { prisma }) => {
+    return prisma.posts({ where: { published: true } });
+  },
+  drafts: (parent, args, { prisma }) => {
+    return prisma.posts({ where: { published: false } });
+  },
+  post: (parent, { id }, { prisma }) => {
+    return prisma.post({ id });
   }
 };
 
