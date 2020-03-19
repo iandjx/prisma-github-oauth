@@ -10,7 +10,7 @@ const requestGithubToken = credentials =>
     body: JSON.stringify(credentials)
   })
     .then(res => res.json())
-    //.then(json => console.log(json))
+    .then(json => console.log(json))
     .catch(err => {
       throw new Error(JSON.stringify(err));
     });
@@ -23,12 +23,12 @@ const requestGithubUserAccount = token =>
     });
 
 async function authorizeWithGithub(credentials) {
-  //console.log(JSON.stringify(credentials));
+  console.log(JSON.stringify(credentials));
   const requestToken = await requestGithubToken(credentials);
   const { access_token } = requestToken;
-  //console.log(access_token);
+  console.log(access_token);
   const githubUser = await requestGithubUserAccount(access_token);
-  //console.log(githubUser);
+  console.log(githubUser);
   return { ...githubUser, access_token };
 }
 
