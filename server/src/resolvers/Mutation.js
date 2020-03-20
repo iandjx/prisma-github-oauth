@@ -4,6 +4,14 @@ import generateToken from "../utils/generateToken";
 import hashPassword from "../utils/hashPassword";
 import { authorizeWithGithub } from "../utils/lib";
 
+import {
+  getPrismaUser,
+  createPrismaUser,
+  getGithubToken,
+  getGithubUser
+} from "../utils/helper";
+import jwt from "jsonwebtoken";
+
 const Mutation = {
   // async createUser(parent, args, { prisma }, info) {
   //   const password = await hashPassword(args.data.password);
@@ -70,44 +78,20 @@ const Mutation = {
   //     info
   //   );
   // },
-  async githubAuth(parent, { code }, context) {
-    let {
-      message,
-      access_token,
-      avatar_url,
-      login,
-      name
-    } = await authorizeWithGithub({
-      client_id: process.env.CLIENT_ID,
-      client_secret: process.env.CLIENT_SECRET,
-      code
-    });
+  async authenticate(parent, { githubCode }, { prisma }, info) {
+    const githubToken = await getGithubToken(githubCode);
+    const githubUser = await getGithubUser(githubToken);
 
-    if (message) {
-      throw new Error(message);
+    let user = await getPrismaUser(prisma, githubUser.id);
+
+    if (!user) {
+      user = await createPrismaUser(prisma, githubUser);
     }
 
-    let latestUserInfo = {
-      name,
-      githubLogin: login,
-      githubToken: access_token,
-      avatar: avatar_url
+    return {
+      token: jwt.sign({ userId: user.id }, process.env.JWT_SECRET),
+      user
     };
-
-    const user = await context.prisma.upsertUser({
-      where: {
-        githubToken: access_token
-      },
-      update: {
-        name,
-        githubToken: access_token,
-        avatar: avatar_url
-      },
-      create: {
-        ...latestUserInfo
-      }
-    });
-    return { user, token: access_token };
   }
 };
 
