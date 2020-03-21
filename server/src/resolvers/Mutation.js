@@ -82,7 +82,7 @@ const Mutation = {
     const githubToken = await getGithubToken(githubCode);
     const githubUser = await getGithubUser(githubToken);
 
-    let user = await getPrismaUser(prisma, githubUser.id.toString());
+    let user = await getPrismaUser(prisma, githubUser.id);
 
     if (!user) {
       user = await createPrismaUser(prisma, githubUser);

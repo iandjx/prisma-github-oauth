@@ -9,7 +9,7 @@ export const getPrismaUser = async (db, githubUserId) => {
 export const createPrismaUser = async (db, githubUser) => {
   const user = await db.mutation.createUser({
     data: {
-      githubUserId: githubUser.id,
+      githubUserId: githubUser.id + "",
       name: githubUser.name,
       bio: githubUser.bio,
       public_repos: githubUser.public_repos,
