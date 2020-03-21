@@ -8,7 +8,6 @@ const Query = {
   //     after: args.after,
   //     orderBy: args.orderBy
   //   };
-
   //   if (args.query) {
   //     opArgs.where = {
   //       OR: [
@@ -18,40 +17,16 @@ const Query = {
   //       ]
   //     };
   //   }
-
   //   return prisma.query.users(opArgs, info);
   // },
-
   // me(parent, args, { prisma, request }, info) {
   //   const userId = getUserId(request);
-
   //   return prisma.query.user({
   //     where: {
   //       id: userId
   //     }
   //   });
   // },
-  me: (parent, args, { prisma, request }) => {
-    const githubToken = getUserId(request);
-
-    return prisma.query.user({
-      where: {
-        githubToken: githubToken
-      }
-    });
-  },
-  githubLoginUrl: () => {
-    return `https://github.com/login/oauth/authorize?client_id=${process.env.CLIENT_ID}`;
-  },
-  feed: (parent, args, { prisma }) => {
-    return prisma.posts({ where: { published: true } });
-  },
-  drafts: (parent, args, { prisma }) => {
-    return prisma.posts({ where: { published: false } });
-  },
-  post: (parent, { id }, { prisma }) => {
-    return prisma.post({ id });
-  }
 };
 
 export { Query as default };
