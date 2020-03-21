@@ -81,9 +81,8 @@ const Mutation = {
   async authenticate(parent, { githubCode }, { prisma }, info) {
     const githubToken = await getGithubToken(githubCode);
     const githubUser = await getGithubUser(githubToken);
-    console.log(githubToken);
-    console.log(githubUser.id);
-    let user = await getPrismaUser(prisma, githubUser.id);
+
+    let user = await getPrismaUser(prisma, githubUser.id.toString());
 
     if (!user) {
       user = await createPrismaUser(prisma, githubUser);
