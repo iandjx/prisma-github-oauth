@@ -27,6 +27,10 @@ const Query = {
   //     }
   //   });
   // },
+  async me(_, args, { prisma, request }, info) {
+    const id = getUserId(request);
+    return await prisma.query.user({ where: { id } }, info);
+  }
 };
 
 export { Query as default };

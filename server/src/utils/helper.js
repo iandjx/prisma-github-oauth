@@ -1,3 +1,4 @@
+import jwt from "jsonwebtoken";
 require("es6-promise").polyfill();
 require("isomorphic-fetch");
 
@@ -52,4 +53,13 @@ export async function getGithubUser(githubToken) {
   }
 
   return data;
+}
+
+export function getUserId(request) {
+  const Authorization = request.get("Authorization");
+  if (Authorization) {
+    const token = Authorization.replace("Bearer ", "");
+    const { userId } = jwt.verify(token, process.env.JWT_SECRET);
+    return userId;
+  }
 }
