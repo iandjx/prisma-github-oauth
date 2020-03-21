@@ -1,4 +1,5 @@
-import * as fetch from "isomorphic-fetch";
+require("es6-promise").polyfill();
+require("isomorphic-fetch");
 
 export const getPrismaUser = async (db, githubUserId) => {
   return await db.query.user({ where: { githubUserId } });

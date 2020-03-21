@@ -20,6 +20,7 @@
     "bcrypt": "^4.0.1",
     "bcryptjs": "^2.4.3",
     "env-cmd": "^10.1.0",
+    "es6-promise": "^4.2.8",
     "graphql-cli": "^2.16.4",
     "graphql-yoga": "^1.14.10",
     "isomorphic-fetch": "^2.2.1",
