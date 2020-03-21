@@ -4,7 +4,7 @@ type User {
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 
-  githubUserId: Int! @unique
+  githubUserId: String! @unique
 
   name: String!
   bio: String!

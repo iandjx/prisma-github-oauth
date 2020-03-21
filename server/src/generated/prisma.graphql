@@ -246,7 +246,7 @@ type User {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  githubUserId: Int!
+  githubUserId: String!
   name: String!
   bio: String!
   public_repos: Int!
@@ -262,7 +262,7 @@ type UserConnection {
 
 input UserCreateInput {
   id: ID
-  githubUserId: Int!
+  githubUserId: String!
   name: String!
   bio: String!
   public_repos: Int!
@@ -277,7 +277,7 @@ input UserCreateOneWithoutNotesInput {
 
 input UserCreateWithoutNotesInput {
   id: ID
-  githubUserId: Int!
+  githubUserId: String!
   name: String!
   bio: String!
   public_repos: Int!
@@ -312,7 +312,7 @@ type UserPreviousValues {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  githubUserId: Int!
+  githubUserId: String!
   name: String!
   bio: String!
   public_repos: Int!
@@ -338,7 +338,7 @@ input UserSubscriptionWhereInput {
 }
 
 input UserUpdateInput {
-  githubUserId: Int
+  githubUserId: String
   name: String
   bio: String
   public_repos: Int
@@ -347,7 +347,7 @@ input UserUpdateInput {
 }
 
 input UserUpdateManyMutationInput {
-  githubUserId: Int
+  githubUserId: String
   name: String
   bio: String
   public_repos: Int
@@ -362,7 +362,7 @@ input UserUpdateOneRequiredWithoutNotesInput {
 }
 
 input UserUpdateWithoutNotesDataInput {
-  githubUserId: Int
+  githubUserId: String
   name: String
   bio: String
   public_repos: Int
@@ -405,14 +405,20 @@ input UserWhereInput {
   updatedAt_lte: DateTime
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
-  githubUserId: Int
-  githubUserId_not: Int
-  githubUserId_in: [Int!]
-  githubUserId_not_in: [Int!]
-  githubUserId_lt: Int
-  githubUserId_lte: Int
-  githubUserId_gt: Int
-  githubUserId_gte: Int
+  githubUserId: String
+  githubUserId_not: String
+  githubUserId_in: [String!]
+  githubUserId_not_in: [String!]
+  githubUserId_lt: String
+  githubUserId_lte: String
+  githubUserId_gt: String
+  githubUserId_gte: String
+  githubUserId_contains: String
+  githubUserId_not_contains: String
+  githubUserId_starts_with: String
+  githubUserId_not_starts_with: String
+  githubUserId_ends_with: String
+  githubUserId_not_ends_with: String
   name: String
   name_not: String
   name_in: [String!]
@@ -467,5 +473,5 @@ input UserWhereInput {
 
 input UserWhereUniqueInput {
   id: ID
-  githubUserId: Int
+  githubUserId: String
 }
