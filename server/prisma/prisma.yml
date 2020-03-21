@@ -2,3 +2,7 @@ datamodel: datamodel.prisma
 secret: ${env:PRISMA_SECRET}
 
 endpoint: ${env:PRISMA_ENDPOINT}
+
+generate:
+  - generator: graphql-schema
+    output: ../src/generated/prisma.graphql

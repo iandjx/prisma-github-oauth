@@ -1,35 +1,18 @@
-type Post {
-  id: ID!
-  published: Boolean!
-  title: String!
-  content: String!
-}
-
-type AuthPayload {
-  id: ID!
-  token: String!
-  user: User!
-}
-
-type User {
-  id: ID!
-  name: String
-  githubLogin: String
-  githubToken: String
-  avatar: String
-}
+# import User, Note from './generated/prisma.graphql'
 
 type Query {
-  feed: [Post!]!
-  drafts: [Post!]!
-  post(id: ID!): Post
-  githubLoginUrl: String!
   me: User
+  note(id: ID!): Note
 }
 
 type Mutation {
-  createDraft(title: String!, content: String): Post
-  deletePost(id: ID!): Post
-  publish(id: ID!): Post
-  githubAuth(code: String!): AuthPayload!
+  createNote(text: String!): Note!
+  updateNote(id: ID!, text: String!): Note
+  deleteNote(id: ID!): Note
+  authenticate(githubCode: String!): AuthenticateUserPayload
+}
+
+type AuthenticateUserPayload {
+  user: User!
+  token: String!
 }

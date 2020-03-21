@@ -10,7 +10,7 @@ type User {
   bio: String!
   public_repos: Int!
   public_gists: Int!
-
+  likes:String
   notes: [Note!]! @relation(name: "UserNote")
 }
 
