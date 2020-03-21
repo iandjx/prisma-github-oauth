@@ -251,7 +251,6 @@ type User {
   bio: String!
   public_repos: Int!
   public_gists: Int!
-  likes: String
   notes(where: NoteWhereInput, orderBy: NoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Note!]
 }
 
@@ -268,7 +267,6 @@ input UserCreateInput {
   bio: String!
   public_repos: Int!
   public_gists: Int!
-  likes: String
   notes: NoteCreateManyWithoutOwnerInput
 }
 
@@ -284,7 +282,6 @@ input UserCreateWithoutNotesInput {
   bio: String!
   public_repos: Int!
   public_gists: Int!
-  likes: String
 }
 
 type UserEdge {
@@ -309,8 +306,6 @@ enum UserOrderByInput {
   public_repos_DESC
   public_gists_ASC
   public_gists_DESC
-  likes_ASC
-  likes_DESC
 }
 
 type UserPreviousValues {
@@ -322,7 +317,6 @@ type UserPreviousValues {
   bio: String!
   public_repos: Int!
   public_gists: Int!
-  likes: String
 }
 
 type UserSubscriptionPayload {
@@ -349,7 +343,6 @@ input UserUpdateInput {
   bio: String
   public_repos: Int
   public_gists: Int
-  likes: String
   notes: NoteUpdateManyWithoutOwnerInput
 }
 
@@ -359,7 +352,6 @@ input UserUpdateManyMutationInput {
   bio: String
   public_repos: Int
   public_gists: Int
-  likes: String
 }
 
 input UserUpdateOneRequiredWithoutNotesInput {
@@ -375,7 +367,6 @@ input UserUpdateWithoutNotesDataInput {
   bio: String
   public_repos: Int
   public_gists: Int
-  likes: String
 }
 
 input UserUpsertWithoutNotesInput {
@@ -466,20 +457,6 @@ input UserWhereInput {
   public_gists_lte: Int
   public_gists_gt: Int
   public_gists_gte: Int
-  likes: String
-  likes_not: String
-  likes_in: [String!]
-  likes_not_in: [String!]
-  likes_lt: String
-  likes_lte: String
-  likes_gt: String
-  likes_gte: String
-  likes_contains: String
-  likes_not_contains: String
-  likes_starts_with: String
-  likes_not_starts_with: String
-  likes_ends_with: String
-  likes_not_ends_with: String
   notes_every: NoteWhereInput
   notes_some: NoteWhereInput
   notes_none: NoteWhereInput
